@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Birthday Letter</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        /* #envelope {
+            width: 200px;
+            height: 150px;
+            background-color: rgb(255, 231, 235);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s;
+        } */
+
+        #message {
+            display: none;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        #letter {
+            display: none;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        #pictures {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .picture {
+            display: none;
+            margin: 10px;
+        }
+
+        #celebrationGif {
+            width: 300px;
+            height: auto;
+            display: none;
+        }
+
+        .heart {
+            position: fixed;
+            font-size: 1.5rem;
+            top: -1vh;
+            transform: translateY(0);
+            animation: fall 3s linear forwards;
+        }
+
+        @keyframes fall {
+            from {
+                transform: translateY(0vh) translateX(-10vw);
+            }
+
+            to {
+                transform: translateY(105vh) translateX(10vw);
+            }
+        }
+
+        #zoomImage {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            object-fit: cover;
+            display: none;
+            z-index: 1000;
+            transition: width 5s ease, height 5s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <img id="zoomImage" src="Palo.png" alt="Palo Alto"
+        style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; object-fit: cover; display: none; z-index: 1000;">
+    <div class="text-center">
+        <img id="envelope" src="envelope-closed.PNG" alt="Envelope" style="width: 300px; transition: transform 0.5s;">
+        <img id="openedEnvelope" src="hidden.PNG" alt="Opened Envelope" style="width: 200px; display: none; ">
+        <br>
+        <div id="clickInstructionText" class="mt-3 mb-3"
+            style="font-size: 30px; font-weight: bold; color: #f96a9c; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">Click
+            equals
+            your age!!</div>
+        <button id="clickButton" class="btn mt-3"
+            style="background-color: #FFC0CB; color: #333; border: none; border-radius: 20px;">Click Click</button>
+        <img id="clickGif"
+            src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWFyYWpwZmd5eXowa2IwNHVkeG9oZ2QyYjJ1a3I1eHN2MjJpNjl4YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5CtQQBulwgWly/giphy.gif"
+            alt="Click GIF" style="display: block; margin: 20px auto; max-width:70%;">
+        <div id="progress" class="mt-2"></div>
+        <div id="message"></div>
+        <img id="celebrationGif"
+            src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWltdTYwaWlkaDdwNTdkNjR3aDlyY2hxMzNseGhqZ3l4cmxnd3RyeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4ghO6ZWy7lPz4CVm6y/giphy.gif"
+            alt="Celebration" style="display: none; max-width: 100%;">
+        <div id="letter" class="alert alert-success"> กดตรงนี้อีกจ้าา!</div>
+        <div id="pictures" style="display: none;">
+            <div class="picture" id="pic2" style="display: none;">
+                <img src="pic2.JPEG" alt="Picture 2" style="width: 400px;" />
+            </div>
+            <div class="picture" id="pic3" style="display: none;">
+                <img src="pic3.JPEG" alt="Picture 3" style="width: 400px;" />
+            </div>
+            <div class="picture" id="pic4" style="display: none;">
+                <img src="pic4.JPEG" alt="Picture 4" style="width: 400px;" />
+            </div>
+            <div class="picture" id="pic1" style="display: none;">
+                <img src="pic5.JPEG" alt="Picture 5" style="width: 400px;" />
+            </div>
+            <div class="picture" id="pic5">
+                <img src="card.jpeg" alt="Card Image" style="width: 400px;" />
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        let clickCount = 0;
+        const totalClicks = 26;
+        const message = "Happy Birthday Babe";
+        const envelope = document.getElementById('envelope');
+        const messageDiv = document.getElementById('message');
+        const letterDiv = document.getElementById('letter');
+        const picturesDiv = document.getElementById('pictures');
+        const progressDiv = document.getElementById('progress');
+        const gif1 = document.getElementById('gif1');
+
+        const clickButton = document.getElementById('clickButton');
+
+        clickButton.addEventListener('click', () => {
+            if (clickCount < totalClicks) {
+                clickCount++;
+                progressDiv.innerText = `${clickCount} of ${totalClicks} clicks completed`;
+                messageDiv.innerText = message.slice(0, clickCount);
+                if (clickCount === totalClicks) {
+                    // Hide the original envelope image
+                    document.getElementById('envelope').style.display = 'none';
+                    // Show the opened envelope image
+                    document.getElementById('openedEnvelope').style.display = 'block';
+                    // Show the letter
+                    letterDiv.style.display = 'block';
+                    // Hide the 'Click to Reveal' button
+                    clickButton.style.display = 'none';
+                    // Optionally, hide the progress text as well
+                    progressDiv.style.display = 'none';
+                    // Hide the click GIF
+                    document.getElementById('clickGif').style.display = 'none';
+
+                    // Show the celebration GIF
+                    document.getElementById('celebrationGif').style.display = 'block';
+
+                    // Start the heart rain
+                    startHeartRain();
+                }
+            }
+        });
+
+        function startHeartRain() {
+            setInterval(createHeart, 300);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+
+            heart.innerText = '💗';
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        letterDiv.addEventListener('click', () => {
+            letterDiv.style.display = 'none';
+            picturesDiv.style.display = 'block';
+            showPicturesSequentially();
+        });
+
+        function showPicturesSequentially() {
+            const pics = ['pic1', 'pic2', 'pic3', 'pic4', 'pic5'];
+            let currentPicIndex = 0;
+
+            function showNextPicture() {
+                if (currentPicIndex > 0) {
+                    document.getElementById(pics[currentPicIndex - 1]).style.display = 'none';
+                }
+                if (currentPicIndex < pics.length) {
+                    document.getElementById(pics[currentPicIndex]).style.display = 'block';
+
+                    let delay = (currentPicIndex === pics.length - 1) ? 7000 : 2000;
+
+                    currentPicIndex++;
+
+                    if (currentPicIndex < pics.length) {
+                        setTimeout(showNextPicture, delay);
+                    } else {
+                        // All pictures have been shown, now show and zoom Palo.png
+                        setTimeout(showAndZoomPalo, 5000);
+                    }
+                }
+            }
+
+            showNextPicture();
+        }
+
+        function showAndZoomPalo() {
+            const paloImg = document.getElementById('zoomImage');
+            paloImg.style.display = 'block';
+
+            // Force a reflow before setting the new size
+            void paloImg.offsetWidth;
+
+            // Set the new size
+            paloImg.style.width = '2000px';
+            paloImg.style.height = '2000px';
+
+            // Optional: Hide other elements or perform any other actions after zooming
+            setTimeout(() => {
+                // For example, hide other elements:
+                document.getElementById('pictures').style.display = 'none';
+                // Add any other actions you want to perform after the zoom is complete
+            }, 5000);
+        }
+
+        // Remove the revealPictures button and its event listener
+        const revealPicturesButton = document.getElementById('revealPictures');
+        if (revealPicturesButton) {
+            revealPicturesButton.remove();
+        }
+    </script>
+
+</body>
+
+</html>
